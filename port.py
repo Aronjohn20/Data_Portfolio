@@ -12,7 +12,7 @@ st.set_page_config(
 # ══════════════════════════════════════════════
 NAME        = "Aron Varghese John"
 ROLE        = "Data Analyst"
-# TAGLINE     = "I turn raw chaos into clean insight."
+TAGLINE     = "I turn raw chaos into clean insight."
 EMAIL       = "aronjohn12112004@gmail.com"
 LINKEDIN    = "www.linkedin.com/in/aron-john27"
 GITHUB      = "https://github.com/Aronjohn20/Aronjohn20"
@@ -610,7 +610,7 @@ if PAGE == "home":
         <div class="hero-eyebrow">Available for opportunities</div>
         <div class="hero-name">Hi, I'm<br><span class="neon-g">{NAME}</span></div>
         <div class="hero-role">{ROLE}</div>
-        # <div class="hero-tagline">"{TAGLINE}"</div>
+        <div class="hero-tagline">"{TAGLINE}"</div>
         <div class="hero-btns">
           <a href="#projects" class="btn-g">&#128640; View Projects</a>
           <a href="{LINKEDIN}" target="_blank" class="btn-o">&#128279; LinkedIn</a>
