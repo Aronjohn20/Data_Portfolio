@@ -133,7 +133,7 @@ CERTS = [
     {"name": "Fundamentals of Analytics on AWS - Part 1",  "issuer": "AWS",   "year": "2025", "color": "#3DDC97"},
     {"name": "Fundamentals of Analytics on AWS - Part 2",  "issuer": "AWS",           "year": "2025", "color": "#00D4FF"},
     {"name": "Python - Hackerrank",  "issuer": "Hackerrank",          "year": "2025", "color": "#FF6B35"},
-    {"name": "SQL - Hackerrank,  "issuer": "Hackerrank",             "year": "2025", "color": "#FF4DFF"},
+    {"name": "SQL - Hackerrank",  "issuer": "Hackerrank",             "year": "2025", "color": "#FF4DFF" }
 ]
 
 # # ✏️ GitHub stats (update manually)
