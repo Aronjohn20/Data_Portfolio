@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="Alex Mercer | Data Analyst",
+    page_title="Aron Varghese John | Data Analyst",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -10,18 +10,19 @@ st.set_page_config(
 # ══════════════════════════════════════════════
 #  ✏️  EDIT YOUR INFO HERE — NEVER TOUCH BELOW
 # ══════════════════════════════════════════════
-NAME        = "Alex Mercer"
+NAME        = "Aron Varghese John"
 ROLE        = "Data Analyst"
-TAGLINE     = "I turn raw chaos into clean insight."
-EMAIL       = "alex.mercer@email.com"
-LINKEDIN    = "https://linkedin.com/in/alexmercer"
-GITHUB      = "https://github.com/alexmercer"
-RESUME_URL  = ""           # ← paste Google Drive / Dropbox PDF link
-PHOTO_URL   = ""           # ← paste a direct image URL or leave empty
+# TAGLINE     = "I turn raw chaos into clean insight."
+EMAIL       = "aronjohn12112004@gmail.com"
+LINKEDIN    = "www.linkedin.com/in/aron-john27"
+GITHUB      = "https://github.com/Aronjohn20/Aronjohn20"
+RESUME_URL  = "https://drive.google.com/drive/folders/15_RRig9nWpqGERHO2WGEbcDbIGdb0tQZ?usp=drive_link"           # ← paste Google Drive / Dropbox PDF link
+PHOTO_URL   = "WhatsApp Image 2026-01-29 at 19.53.31.jpeg"           # ← paste a direct image URL or leave empty
 
 ABOUT_TEXT = """
-Hi! I'm Alex — a data analyst obsessed with finding the story inside messy datasets.
-I work end-to-end: SQL wrangling, PySpark pipelines, Power BI dashboards, and Python models.
+Hi! I'm Aron — a aspiring data analyst obsessed with finding the story and solutions inside messy datasets.
+I work end-to-end: SQL wrangling, Excel Handling, CLeaning, Transforming, Visualizing and Deriving Insights
+making people understand what problem they are facing and how to handle it.
 I care about making data <em>understandable</em>, not just accurate.
 """
 
@@ -34,14 +35,14 @@ STATS = [
 
 # Icon = emoji, color = neon hex
 SKILLS = [
-    {"name": "Python",           "icon": "🐍", "color": "#3DDC97", "level": 90},
-    {"name": "SQL",              "icon": "🗄️", "color": "#00D4FF", "level": 92},
-    {"name": "PySpark",          "icon": "⚡", "color": "#FF6B35", "level": 75},
-    {"name": "Power BI",         "icon": "📊", "color": "#F7C59F", "level": 85},
-    {"name": "Tableau",          "icon": "📈", "color": "#FF4DFF", "level": 82},
-    {"name": "Excel",            "icon": "📗", "color": "#00FF88", "level": 88},
-    {"name": "Machine Learning", "icon": "🤖", "color": "#BD00FF", "level": 65},
-    {"name": "DAX",              "icon": "🔢", "color": "#FF007A", "level": 78},
+    {"name": "Python",           "icon": "🐍", "color": "#3DDC97", "level": 70},
+    {"name": "SQL",              "icon": "🗄️", "color": "#00D4FF", "level": 70},
+    {"name": "PySpark",          "icon": "⚡", "color": "#FF6B35", "level": 60},
+    {"name": "Power BI",         "icon": "📊", "color": "#F7C59F", "level": 80},
+    {"name": "Tableau",          "icon": "📈", "color": "#FF4DFF", "level": 50},
+    {"name": "Excel",            "icon": "📗", "color": "#00FF88", "level": 75},
+    # {"name": "Machine Learning", "icon": "🤖", "color": "#BD00FF", "level": 65},
+    {"name": "DAX",              "icon": "🔢", "color": "#FF007A", "level": 60},
 ]
 
 # ✏️ Copy-paste a block {} to add a new project
@@ -104,46 +105,45 @@ PROJECTS = [
 
 # ✏️ Work experience
 EXPERIENCE = [
-    {
-        "role":    "Senior Data Analyst",
-        "company": "TechCorp Solutions",
-        "period":  "2022 – Present",
-        "color":   "#3DDC97",
-        "points":  ["Led analytics for 3 product lines", "Built enterprise Power BI ecosystem", "Mentored 2 junior analysts"],
-    },
-    {
-        "role":    "Data Analyst",
-        "company": "RetailX Analytics",
-        "period":  "2020 – 2022",
-        "color":   "#00D4FF",
-        "points":  ["Designed ETL pipelines in PySpark", "Reduced reporting time by 60%", "Customer segmentation models"],
-    },
-    {
-        "role":    "Junior Data Analyst",
-        "company": "StartupBase",
-        "period":  "2019 – 2020",
-        "color":   "#FF4DFF",
-        "points":  ["SQL reporting & dashboards", "A/B test analysis", "Python automation scripts"],
-    },
+    # {
+    #     "role":    "Senior Data Analyst",
+    #     "company": "TechCorp Solutions",
+    #     "period":  "2022 – Present",
+    #     "color":   "#3DDC97",
+    #     "points":  ["Led analytics for 3 product lines", "Built enterprise Power BI ecosystem", "Mentored 2 junior analysts"],
+    # },
+    # {
+    #     "role":    "Data Analyst",
+    #     "company": "RetailX Analytics",
+    #     "period":  "2020 – 2022",
+    #     "color":   "#00D4FF",
+    #     "points":  ["Designed ETL pipelines in PySpark", "Reduced reporting time by 60%", "Customer segmentation models"],
+    # },
+    # {
+    #     "role":    "Junior Data Analyst",
+    #     "company": "StartupBase",
+    #     "period":  "2019 – 2020",
+    #     "color":   "#FF4DFF",
+    #     "points":  ["SQL reporting & dashboards", "A/B test analysis", "Python automation scripts"],
+    # },
 ]
 
 # ✏️ Certifications
 CERTS = [
-    {"name": "Google Data Analytics",       "issuer": "Google / Coursera",   "year": "2023", "color": "#3DDC97"},
-    {"name": "Microsoft Power BI Analyst",  "issuer": "Microsoft",           "year": "2022", "color": "#00D4FF"},
-    {"name": "Databricks Spark Developer",  "issuer": "Databricks",          "year": "2023", "color": "#FF6B35"},
-    {"name": "Tableau Desktop Specialist",  "issuer": "Tableau",             "year": "2021", "color": "#FF4DFF"},
-    {"name": "SQL for Data Science",        "issuer": "UC Davis / Coursera", "year": "2020", "color": "#FFD166"},
+    {"name": "Fundamentals of Analytics on AWS - Part 1",  "issuer": "AWS",   "year": "2025", "color": "#3DDC97"},
+    {"name": "Fundamentals of Analytics on AWS - Part 2",  "issuer": "AWS",           "year": "2025", "color": "#00D4FF"},
+    {"name": "Python - Hackerrank",  "issuer": "Hackerrank",          "year": "2025", "color": "#FF6B35"},
+    {"name": "SQL - Hackerrank,  "issuer": "Hackerrank",             "year": "2025", "color": "#FF4DFF"},
 ]
 
-# ✏️ GitHub stats (update manually)
-GITHUB_USERNAME = "alexmercer"
-GH_STATS = {
-    "repos":   42,
-    "stars":   180,
-    "commits": "1.2k",
-    "streak":  "47 days",
-}
+# # ✏️ GitHub stats (update manually)
+# GITHUB_USERNAME = "alexmercer"
+# GH_STATS = {
+#     "repos":   42,
+#     "stars":   180,
+#     "commits": "1.2k",
+#     "streak":  "47 days",
+# }
 
 # ══════════════════════════════════════════════
 #  PAGE ROUTING
