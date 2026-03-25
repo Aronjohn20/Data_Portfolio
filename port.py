@@ -655,7 +655,7 @@ if PAGE == "home":
 #  PAGE 2 — PROJECTS
 # ══════════════════════════════════════════════
 elif PAGE == "projects":
-     st.markdown("""
+    st.markdown("""
     <style>
     .proj-link {
         position: relative;
