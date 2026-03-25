@@ -145,447 +145,494 @@ CERTS = [
 #     "streak":  "47 days",
 # }
 
-# ══════════════════════════════════════════════
-#  PAGE ROUTING
-# ══════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════
+#  PAGE STATE — using session_state (no URL, no new tabs!)
+# ══════════════════════════════════════════════════════════
 if "page" not in st.session_state:
     st.session_state.page = "home"
-
+ 
+def go(p):
+    st.session_state.page = p
+    st.rerun()
+ 
 PAGE = st.session_state.page
-params = st.query_params
-if "page" in params and params["page"] != PAGE:
-    st.session_state.page = params["page"]
-    PAGE = params["page"]
-
-# ══════════════════════════════════════════════
-#  GLOBAL STYLES
-# ══════════════════════════════════════════════
+ 
+# ══════════════════════════════════════════════════════════
+#  GLOBAL CSS
+# ══════════════════════════════════════════════════════════
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
-
-html,body,[class*="css"]{
-  font-family:'Outfit',sans-serif;
-  background:#030712;
-  color:#e2e8f0;
-  overflow-x:hidden;
+ 
+html, body, [class*="css"] {
+    font-family: 'Outfit', sans-serif !important;
+    background: #030712 !important;
+    color: #e2e8f0;
 }
-#MainMenu,footer,header{visibility:hidden}
-.block-container{padding:0!important;max-width:100%!important}
-section[data-testid="stMain"]>div{padding:0!important}
-
-body::after{
-  content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.025) 2px,rgba(0,0,0,.025) 4px);
-  pointer-events:none;z-index:9999;
+#MainMenu, footer, header { visibility: hidden; }
+.block-container { padding: 0 !important; max-width: 100% !important; }
+section[data-testid="stMain"] > div { padding: 0 !important; }
+ 
+/* hide default streamlit button styles, we restyle them as nav */
+div[data-testid="stHorizontalBlock"] > div { padding: 0 !important; gap: 0 !important; }
+ 
+/* scanlines */
+body::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
 }
-
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:1000;
-  background:rgba(3,7,18,.9);backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(255,255,255,.07);
-  display:flex;justify-content:space-between;align-items:center;
-  padding:.75rem 3rem;
+ 
+/* bg grid */
+.bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+        linear-gradient(rgba(61,220,151,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(61,220,151,.03) 1px, transparent 1px);
+    background-size: 60px 60px;
 }
-.nav-logo{
-  font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;
-  background:linear-gradient(90deg,#3DDC97,#00D4FF);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+ 
+/* ── NAV (top bar rendered via HTML, buttons rendered via st.button) ── */
+.nav-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(3,7,18,.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    padding: .65rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
 }
-.nav-links{display:flex;gap:.3rem}
-.nav-links a{
-  font-size:.78rem;font-weight:500;color:#64748b;
-  text-decoration:none;padding:.35rem .9rem;border-radius:6px;
-  border:1px solid transparent;transition:all .2s;
+.nav-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: .95rem;
+    background: linear-gradient(90deg, #3DDC97, #00D4FF);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.nav-links a:hover,.nav-links a.active{
-  color:#fff;border-color:rgba(255,255,255,.12);
-  background:rgba(255,255,255,.06);
+ 
+/* Streamlit buttons styled as nav pills */
+.stButton > button {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: #64748b !important;
+    font-size: .78rem !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 500 !important;
+    padding: .3rem .85rem !important;
+    border-radius: 6px !important;
+    transition: all .2s !important;
+    white-space: nowrap !important;
 }
-
-.page{padding-top:56px;min-height:100vh}
-
-.section{padding:5rem 4rem 4rem;max-width:1200px;margin:0 auto}
-
-.sec-eyebrow{
-  font-family:'DM Mono',monospace;font-size:.72rem;
-  letter-spacing:3px;text-transform:uppercase;
-  color:#3DDC97;margin-bottom:.6rem;
+.stButton > button:hover {
+    color: #fff !important;
+    border-color: rgba(255,255,255,.12) !important;
+    background: rgba(255,255,255,.06) !important;
 }
-.sec-title{
-  font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;
-  color:#fff;line-height:1.1;margin-bottom:.5rem;
+.nav-active > div > button {
+    color: #3DDC97 !important;
+    border-color: rgba(61,220,151,.3) !important;
+    background: rgba(61,220,151,.08) !important;
 }
-.sec-title span{
-  background:linear-gradient(90deg,#3DDC97,#00D4FF);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+ 
+/* ── PAGE WRAPPER ── */
+.page { padding-top: 58px; }
+ 
+/* ── SECTION ── */
+.section { padding: 4rem 4rem 3rem; max-width: 1200px; margin: 0 auto; }
+ 
+.sec-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: .7rem;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: #3DDC97; margin-bottom: .5rem;
 }
-.sec-sub{font-size:.95rem;color:#64748b;margin-bottom:3rem;max-width:500px}
-
-/* HERO */
-.hero{
-  min-height:calc(100vh - 56px);
-  display:grid;grid-template-columns:1fr 1fr;
-  align-items:center;gap:4rem;
-  padding:4rem;max-width:1200px;margin:0 auto;
+.sec-title {
+    font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800;
+    color: #fff; line-height: 1.1; margin-bottom: .4rem;
 }
-.hero-eyebrow{
-  font-family:'DM Mono',monospace;font-size:.75rem;
-  letter-spacing:3px;color:#3DDC97;margin-bottom:1rem;
-  display:flex;align-items:center;gap:.5rem;
+.sec-title span {
+    background: linear-gradient(90deg, #3DDC97, #00D4FF);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.hero-eyebrow::before{content:'';width:30px;height:1px;background:#3DDC97}
-.hero-name{
-  font-family:'Syne',sans-serif;font-size:4rem;font-weight:800;
-  line-height:1.05;color:#fff;margin-bottom:.5rem;
+.sec-sub { font-size: .9rem; color: #64748b; margin-bottom: 2.5rem; }
+ 
+/* ── HERO ── */
+.hero-wrap {
+    display: grid; grid-template-columns: 1fr 420px;
+    align-items: center; gap: 3rem;
+    padding: 3rem 4rem 2rem; max-width: 1200px; margin: 0 auto;
 }
-.neon-g{
-  background:linear-gradient(90deg,#3DDC97,#00D4FF);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.hero-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: .72rem;
+    letter-spacing: 3px; color: #3DDC97; margin-bottom: .9rem;
+    display: flex; align-items: center; gap: .5rem;
 }
-.hero-role{
-  font-family:'Syne',sans-serif;font-size:1.5rem;
-  font-weight:600;color:#94a3b8;margin-bottom:1rem;
+.hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: #3DDC97; }
+.hero-name {
+    font-family: 'Syne', sans-serif; font-size: 3.6rem; font-weight: 800;
+    line-height: 1.05; color: #fff; margin-bottom: .4rem;
 }
-.hero-tagline{
-  font-size:1.05rem;color:#64748b;line-height:1.7;
-  margin-bottom:2rem;max-width:440px;
-  font-style:italic;border-left:2px solid #3DDC97;padding-left:1rem;
+.neon-g {
+    background: linear-gradient(90deg, #3DDC97, #00D4FF);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.hero-btns{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2.5rem}
-.btn-neon{
-  padding:.6rem 1.5rem;border-radius:8px;font-size:.85rem;
-  font-weight:600;text-decoration:none;transition:all .25s;
-  display:inline-flex;align-items:center;gap:.4rem;
-  font-family:'Outfit',sans-serif;
+.hero-role {
+    font-family: 'Syne', sans-serif; font-size: 1.4rem;
+    font-weight: 600; color: #94a3b8; margin-bottom: .8rem;
 }
-.btn-neon-g{
-  background:linear-gradient(135deg,#3DDC97,#00D4FF);
-  color:#030712;box-shadow:0 0 20px rgba(61,220,151,.4);
+.hero-tagline {
+    font-size: 1rem; color: #64748b; line-height: 1.7;
+    margin-bottom: 1.8rem; font-style: italic;
+    border-left: 2px solid #3DDC97; padding-left: 1rem;
+    max-width: 420px;
 }
-.btn-neon-g:hover{box-shadow:0 0 35px rgba(61,220,151,.7);transform:translateY(-2px)}
-.btn-neon-o{
-  background:transparent;color:#fff;
-  border:1px solid rgba(255,255,255,.2);
+.hero-btns { display: flex; gap: .8rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.btn-g {
+    padding: .55rem 1.4rem; border-radius: 8px; font-size: .84rem;
+    font-weight: 700; text-decoration: none; transition: all .25s;
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: linear-gradient(135deg, #3DDC97, #00D4FF);
+    color: #030712; box-shadow: 0 0 20px rgba(61,220,151,.4);
 }
-.btn-neon-o:hover{border-color:#3DDC97;color:#3DDC97;background:rgba(61,220,151,.07)}
-
-.stat-row{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center}
-.stat-item{text-align:center}
-.stat-num{
-  font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;
-  background:linear-gradient(135deg,#3DDC97,#00D4FF);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.btn-g:hover { box-shadow: 0 0 35px rgba(61,220,151,.7); transform: translateY(-2px); }
+.btn-o {
+    padding: .55rem 1.4rem; border-radius: 8px; font-size: .84rem;
+    font-weight: 700; text-decoration: none; transition: all .25s;
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: transparent; color: #fff;
+    border: 1px solid rgba(255,255,255,.2);
 }
-.stat-label{font-size:.7rem;color:#475569;font-family:'DM Mono',monospace;letter-spacing:1px}
-.stat-div{width:1px;height:36px;background:rgba(255,255,255,.08)}
-
-.hero-right{display:flex;justify-content:center;align-items:center;position:relative}
-.photo-container{position:relative;width:320px;height:320px;display:flex;align-items:center;justify-content:center}
-.photo-ring{position:absolute;border-radius:50%;border:1px solid transparent;animation:spin linear infinite}
-.photo-ring-1{width:320px;height:320px;border-color:rgba(61,220,151,.3);border-top-color:#3DDC97;animation-duration:8s}
-.photo-ring-2{width:280px;height:280px;border-color:rgba(0,212,255,.2);border-right-color:#00D4FF;animation-duration:12s;animation-direction:reverse}
-.photo-ring-3{width:355px;height:355px;border-color:rgba(189,0,255,.1);border-bottom-color:rgba(189,0,255,.4);animation-duration:20s}
-@keyframes spin{to{transform:rotate(360deg)}}
-.photo-inner{
-  width:230px;height:230px;border-radius:50%;
-  background:linear-gradient(135deg,#0d1f2d,#1a0533);
-  border:2px solid rgba(61,220,151,.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:5rem;overflow:hidden;
-  box-shadow:0 0 40px rgba(61,220,151,.15),inset 0 0 40px rgba(0,0,0,.5);
+.btn-o:hover { border-color: #3DDC97; color: #3DDC97; background: rgba(61,220,151,.07); }
+ 
+.stat-row { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+.stat-item { text-align: center; }
+.stat-num {
+    font-family: 'Syne', sans-serif; font-size: 1.7rem; font-weight: 800;
+    background: linear-gradient(135deg, #3DDC97, #00D4FF);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.photo-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.photo-placeholder{font-size:4.5rem;filter:drop-shadow(0 0 12px #3DDC97)}
-
+.stat-label { font-size: .67rem; color: #475569; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+.stat-div { width: 1px; height: 32px; background: rgba(255,255,255,.08); }
+ 
+/* PHOTO */
+.photo-wrap { display: flex; justify-content: center; align-items: center; position: relative; }
+.photo-glow {
+    position: absolute; width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(61,220,151,.12), transparent 70%);
+    pointer-events: none;
+}
+.photo-glow2 {
+    position: absolute; width: 380px; height: 380px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,255,.07), transparent 70%);
+    pointer-events: none;
+}
+.photo-container { position: relative; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; }
+.ring { position: absolute; border-radius: 50%; border: 1px solid transparent; animation: spin linear infinite; }
+.r1 { width: 300px; height: 300px; border-color: rgba(61,220,151,.3); border-top-color: #3DDC97; animation-duration: 8s; }
+.r2 { width: 262px; height: 262px; border-color: rgba(0,212,255,.2); border-right-color: #00D4FF; animation-duration: 12s; animation-direction: reverse; }
+.r3 { width: 334px; height: 334px; border-color: rgba(189,0,255,.1); border-bottom-color: rgba(189,0,255,.4); animation-duration: 20s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.photo-inner {
+    width: 218px; height: 218px; border-radius: 50%;
+    background: linear-gradient(135deg, #0d1f2d, #1a0533);
+    border: 2px solid rgba(61,220,151,.3);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(61,220,151,.15), inset 0 0 40px rgba(0,0,0,.5);
+}
+.photo-inner img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.photo-placeholder { font-size: 4rem; filter: drop-shadow(0 0 12px #3DDC97); }
+ 
 /* ABOUT */
-.about-text{
-  font-size:.97rem;color:#94a3b8;line-height:1.9;
-  background:rgba(255,255,255,.02);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:14px;padding:2rem;position:relative;
+.about-text {
+    font-size: .95rem; color: #94a3b8; line-height: 1.9;
+    background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.06);
+    border-radius: 14px; padding: 1.8rem; position: relative;
 }
-.about-text::before{
-  content:'';position:absolute;top:0;left:0;
-  width:3px;height:100%;
-  background:linear-gradient(#3DDC97,#BD00FF);
-  border-radius:3px 0 0 3px;
+.about-text::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(#3DDC97, #BD00FF);
+    border-radius: 3px 0 0 3px;
 }
-
+ 
 /* SKILLS */
-.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-.skill-badge{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:14px;padding:1.2rem 1rem;text-align:center;
-  transition:all .3s;cursor:default;position:relative;overflow:hidden;
+.skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9rem; }
+.skill-badge {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 13px; padding: 1.1rem .9rem; text-align: center;
+    transition: all .3s; position: relative; overflow: hidden;
 }
-.skill-badge::before{
-  content:'';position:absolute;inset:0;border-radius:14px;
-  background:radial-gradient(circle at 50% 0%,var(--sc) 0%,transparent 70%);
-  opacity:0;transition:opacity .3s;
+.skill-badge::before {
+    content: ''; position: absolute; inset: 0; border-radius: 13px;
+    background: radial-gradient(circle at 50% 0%, var(--sc) 0%, transparent 70%);
+    opacity: 0; transition: opacity .3s;
 }
-.skill-badge:hover::before{opacity:.15}
-.skill-badge:hover{
-  border-color:var(--sc);
-  box-shadow:0 0 25px color-mix(in srgb,var(--sc) 40%,transparent),0 0 8px color-mix(in srgb,var(--sc) 20%,transparent);
-  transform:translateY(-5px);
+.skill-badge:hover::before { opacity: .15; }
+.skill-badge:hover {
+    border-color: var(--sc);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--sc) 40%, transparent);
+    transform: translateY(-5px);
 }
-.skill-icon{
-  font-size:2rem;margin-bottom:.6rem;display:block;
-  filter:drop-shadow(0 0 6px var(--sc));
-  animation:pulse-glow 2.5s ease-in-out infinite alternate;
+.skill-icon {
+    font-size: 1.9rem; margin-bottom: .5rem; display: block;
+    animation: pglow 2.5s ease-in-out infinite alternate;
 }
-@keyframes pulse-glow{
-  0%{filter:drop-shadow(0 0 4px var(--sc)) brightness(1)}
-  100%{filter:drop-shadow(0 0 14px var(--sc)) drop-shadow(0 0 28px var(--sc)) brightness(1.2)}
+@keyframes pglow {
+    0%   { filter: drop-shadow(0 0 4px var(--sc)) brightness(1); }
+    100% { filter: drop-shadow(0 0 14px var(--sc)) drop-shadow(0 0 28px var(--sc)) brightness(1.2); }
 }
-.skill-name{font-size:.8rem;font-weight:600;color:#e2e8f0;margin-bottom:.5rem}
-.skill-bar-track{background:rgba(255,255,255,.07);border-radius:20px;height:4px;overflow:hidden}
-.skill-bar-fill{
-  height:100%;border-radius:20px;
-  background:linear-gradient(90deg,var(--sc),color-mix(in srgb,var(--sc) 50%,#fff));
-  box-shadow:0 0 8px var(--sc);
+.skill-name { font-size: .78rem; font-weight: 600; color: #e2e8f0; margin-bottom: .45rem; }
+.skill-track { background: rgba(255,255,255,.07); border-radius: 20px; height: 4px; overflow: hidden; }
+.skill-fill {
+    height: 100%; border-radius: 20px;
+    background: linear-gradient(90deg, var(--sc), color-mix(in srgb, var(--sc) 50%, #fff));
+    box-shadow: 0 0 8px var(--sc);
 }
-.skill-pct{font-size:.65rem;color:#475569;font-family:'DM Mono',monospace;margin-top:.3rem}
-
-/* BG GRID */
-.bg-grid{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(61,220,151,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(61,220,151,.03) 1px,transparent 1px);
-  background-size:60px 60px;
+.skill-pct { font-size: .62rem; color: #475569; font-family: 'DM Mono', monospace; margin-top: .28rem; }
+ 
+/* DIVIDER */
+.ndiv {
+    height: 1px; max-width: 1200px; margin: 0 auto;
+    background: linear-gradient(90deg, transparent, #3DDC97, #00D4FF, #BD00FF, transparent);
+    opacity: .2;
 }
-
+ 
 /* PROJECTS */
-.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
-.proj-card{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:16px;padding:1.6rem;
-  transition:all .35s;position:relative;overflow:hidden;
+.proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+.proj-card {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 15px; padding: 1.5rem; transition: all .35s;
+    position: relative; overflow: hidden;
 }
-.proj-card::after{
-  content:'';position:absolute;inset:0;border-radius:16px;
-  background:radial-gradient(circle at 30% 0%,var(--pc) 0%,transparent 65%);
-  opacity:0;transition:opacity .35s;
+.proj-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: 15px;
+    background: radial-gradient(circle at 30% 0%, var(--pc) 0%, transparent 65%);
+    opacity: 0; transition: opacity .35s;
 }
-.proj-card:hover{
-  border-color:var(--pc);
-  transform:translateY(-8px) scale(1.02);
-  box-shadow:0 0 0 1px var(--pc),0 0 40px color-mix(in srgb,var(--pc) 25%,transparent),0 20px 60px rgba(0,0,0,.5);
+.proj-card:hover {
+    border-color: var(--pc); transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 0 0 1px var(--pc), 0 0 40px color-mix(in srgb, var(--pc) 25%, transparent), 0 20px 60px rgba(0,0,0,.5);
 }
-.proj-card:hover::after{opacity:.08}
-.proj-topbar{height:2px;margin:-1.6rem -1.6rem 1.4rem;background:var(--pc);box-shadow:0 0 12px var(--pc)}
-.proj-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem}
-.proj-emoji{font-size:1.8rem;filter:drop-shadow(0 0 8px var(--pc))}
-.proj-impact{
-  font-family:'DM Mono',monospace;font-size:.65rem;
-  padding:.2rem .6rem;border-radius:20px;
-  background:color-mix(in srgb,var(--pc) 15%,transparent);
-  border:1px solid color-mix(in srgb,var(--pc) 40%,transparent);
-  color:var(--pc);
+.proj-card:hover::after { opacity: .08; }
+.proj-topbar { height: 2px; margin: -1.5rem -1.5rem 1.3rem; background: var(--pc); box-shadow: 0 0 12px var(--pc); }
+.proj-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: .7rem; }
+.proj-emoji { font-size: 1.7rem; filter: drop-shadow(0 0 8px var(--pc)); }
+.proj-impact {
+    font-family: 'DM Mono', monospace; font-size: .62rem;
+    padding: .18rem .55rem; border-radius: 20px;
+    background: color-mix(in srgb, var(--pc) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--pc) 40%, transparent);
+    color: var(--pc);
 }
-.proj-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:.6rem}
-.proj-desc{font-size:.8rem;color:#64748b;line-height:1.7;margin-bottom:1rem}
-.proj-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.9rem}
-.ptag{
-  font-size:.62rem;font-family:'DM Mono',monospace;
-  padding:.18rem .55rem;border-radius:5px;
-  background:rgba(255,255,255,.05);color:#94a3b8;
-  border:1px solid rgba(255,255,255,.07);
+.proj-title { font-family: 'Syne', sans-serif; font-size: .97rem; font-weight: 700; color: #f1f5f9; margin-bottom: .5rem; }
+.proj-desc { font-size: .78rem; color: #64748b; line-height: 1.7; margin-bottom: .9rem; }
+.proj-tags { display: flex; flex-wrap: wrap; gap: .28rem; margin-bottom: .8rem; }
+.ptag {
+    font-size: .6rem; font-family: 'DM Mono', monospace;
+    padding: .15rem .5rem; border-radius: 5px;
+    background: rgba(255,255,255,.05); color: #94a3b8;
+    border: 1px solid rgba(255,255,255,.07);
 }
-.proj-link a{font-size:.75rem;color:var(--pc);text-decoration:none;font-weight:600;font-family:'DM Mono',monospace}
-.proj-link a:hover{text-shadow:0 0 10px var(--pc)}
-
+.proj-link a { font-size: .73rem; color: var(--pc); text-decoration: none; font-weight: 600; font-family: 'DM Mono', monospace; }
+.proj-link a:hover { text-shadow: 0 0 10px var(--pc); }
+ 
 /* TIMELINE */
-.timeline{position:relative;padding-left:2rem}
-.timeline::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;
-  width:1px;background:linear-gradient(#3DDC97,#BD00FF,transparent);
+.timeline { position: relative; padding-left: 2rem; }
+.timeline::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 1px; background: linear-gradient(#3DDC97, #BD00FF, transparent);
 }
-.tl-item{position:relative;margin-bottom:2.5rem;padding-left:1.5rem}
-.tl-dot{
-  position:absolute;left:-2.45rem;top:.35rem;
-  width:12px;height:12px;border-radius:50%;
-  background:var(--tc);box-shadow:0 0 12px var(--tc),0 0 24px var(--tc);
-  border:2px solid rgba(255,255,255,.15);
+.tl-item { position: relative; margin-bottom: 2.2rem; padding-left: 1.4rem; }
+.tl-dot {
+    position: absolute; left: -2.42rem; top: .3rem;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--tc); box-shadow: 0 0 10px var(--tc), 0 0 20px var(--tc);
+    border: 2px solid rgba(255,255,255,.15);
 }
-.tl-period{font-family:'DM Mono',monospace;font-size:.67rem;color:#475569;margin-bottom:.3rem;letter-spacing:1px}
-.tl-role{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:#f1f5f9;margin-bottom:.15rem}
-.tl-company{font-size:.82rem;color:var(--tc);margin-bottom:.6rem;font-weight:600}
-.tl-points{list-style:none;padding:0}
-.tl-points li{font-size:.82rem;color:#64748b;margin-bottom:.3rem;padding-left:.9rem;position:relative}
-.tl-points li::before{content:'▸';position:absolute;left:0;color:var(--tc);font-size:.65rem}
-
+.tl-period { font-family: 'DM Mono', monospace; font-size: .65rem; color: #475569; margin-bottom: .25rem; letter-spacing: 1px; }
+.tl-role { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: .12rem; }
+.tl-company { font-size: .8rem; color: var(--tc); margin-bottom: .5rem; font-weight: 600; }
+.tl-points { list-style: none; padding: 0; }
+.tl-points li { font-size: .8rem; color: #64748b; margin-bottom: .25rem; padding-left: .85rem; position: relative; }
+.tl-points li::before { content: '▸'; position: absolute; left: 0; color: var(--tc); font-size: .62rem; }
+ 
 /* CERTS */
-.certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-.cert-card{
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;padding:1.2rem 1.3rem;transition:all .3s;position:relative;overflow:hidden;
+.certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem; }
+.cert-card {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 12px; padding: 1.1rem 1.2rem; transition: all .3s; position: relative; overflow: hidden;
 }
-.cert-card:hover{
-  border-color:var(--cc);
-  box-shadow:0 0 20px color-mix(in srgb,var(--cc) 30%,transparent);
-  transform:translateY(-3px);
+.cert-card:hover {
+    border-color: var(--cc);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--cc) 30%, transparent);
+    transform: translateY(-3px);
 }
-.cert-card::before{content:'🏆';position:absolute;right:1rem;top:1rem;font-size:1.2rem;opacity:.2}
-.cert-name{font-size:.87rem;font-weight:700;color:#f1f5f9;margin-bottom:.3rem}
-.cert-issuer{font-size:.75rem;color:var(--cc);margin-bottom:.2rem;font-weight:600}
-.cert-year{font-family:'DM Mono',monospace;font-size:.67rem;color:#475569}
-
+.cert-card::before { content: '🏆'; position: absolute; right: .9rem; top: .9rem; font-size: 1.1rem; opacity: .18; }
+.cert-name { font-size: .84rem; font-weight: 700; color: #f1f5f9; margin-bottom: .28rem; }
+.cert-issuer { font-size: .73rem; color: var(--cc); margin-bottom: .18rem; font-weight: 600; }
+.cert-year { font-family: 'DM Mono', monospace; font-size: .65rem; color: #475569; }
+ 
 /* GH STATS */
-.gh-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-.gh-stat{
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;padding:1.5rem;text-align:center;transition:all .3s;
+.gh-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9rem; }
+.gh-stat {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 12px; padding: 1.4rem; text-align: center; transition: all .3s;
 }
-.gh-stat:hover{border-color:#3DDC97;box-shadow:0 0 20px rgba(61,220,151,.2)}
-.gh-stat-num{
-  font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;
-  background:linear-gradient(135deg,#3DDC97,#00D4FF);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.gh-stat:hover { border-color: #3DDC97; box-shadow: 0 0 20px rgba(61,220,151,.2); }
+.gh-num {
+    font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 800;
+    background: linear-gradient(135deg, #3DDC97, #00D4FF);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.gh-stat-label{font-size:.72rem;color:#475569;font-family:'DM Mono',monospace;margin-top:.3rem}
-
+.gh-label { font-size: .7rem; color: #475569; font-family: 'DM Mono', monospace; margin-top: .28rem; }
+ 
 /* RESUME */
-.resume-box{
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
-  border-radius:16px;padding:3rem;text-align:center;max-width:500px;margin:0 auto;
+.resume-box {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 16px; padding: 3rem; text-align: center; max-width: 480px; margin: 0 auto;
 }
-.resume-box p{color:#64748b;line-height:1.8;margin-bottom:1.5rem;font-size:.92rem}
-.resume-icon{font-size:3.5rem;margin-bottom:1rem;filter:drop-shadow(0 0 16px #3DDC97)}
-
+.resume-box p { color: #64748b; line-height: 1.8; margin-bottom: 1.4rem; font-size: .9rem; }
+.resume-icon { font-size: 3.2rem; margin-bottom: .9rem; filter: drop-shadow(0 0 16px #3DDC97); }
+ 
 /* FOOTER */
-.footer{
-  background:rgba(3,7,18,.95);border-top:1px solid rgba(255,255,255,.06);
-  padding:3rem 4rem;
+.footer {
+    background: rgba(3,7,18,.97); border-top: 1px solid rgba(255,255,255,.06);
+    padding: 2.5rem 4rem;
 }
-.footer-inner{
-  max-width:1200px;margin:0 auto;
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;
+.footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.2rem;
 }
-.footer-logo{
-  font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;
-  background:linear-gradient(90deg,#3DDC97,#00D4FF);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.footer-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem;
+    background: linear-gradient(90deg, #3DDC97, #00D4FF);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.footer-sub{font-size:.75rem;color:#334155;margin-top:.2rem;font-family:'DM Mono',monospace}
-.footer-links{display:flex;gap:.8rem;flex-wrap:wrap}
-.footer-link{
-  display:flex;align-items:center;gap:.4rem;
-  padding:.45rem 1rem;border-radius:8px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
-  color:#94a3b8;font-size:.78rem;text-decoration:none;transition:all .25s;font-weight:500;
+.footer-sub { font-size: .72rem; color: #334155; margin-top: .18rem; font-family: 'DM Mono', monospace; }
+.footer-links { display: flex; gap: .7rem; flex-wrap: wrap; }
+.footer-link {
+    display: flex; align-items: center; gap: .35rem;
+    padding: .4rem .9rem; border-radius: 7px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+    color: #94a3b8; font-size: .76rem; text-decoration: none; transition: all .22s; font-weight: 500;
 }
-.footer-link:hover{border-color:#3DDC97;color:#3DDC97;background:rgba(61,220,151,.07)}
-.footer-copy{
-  font-size:.7rem;color:#1e293b;font-family:'DM Mono',monospace;
-  margin-top:1.5rem;text-align:center;max-width:1200px;
-  margin-left:auto;margin-right:auto;
-}
-.neon-divider{
-  height:1px;max-width:1200px;margin:0 auto;
-  background:linear-gradient(90deg,transparent,#3DDC97,#00D4FF,#BD00FF,transparent);
-  opacity:.25;
-}
+.footer-link:hover { border-color: #3DDC97; color: #3DDC97; background: rgba(61,220,151,.07); }
+.footer-copy { font-size: .68rem; color: #1e293b; font-family: 'DM Mono', monospace; margin-top: 1.2rem; text-align: center; max-width: 1200px; margin-left: auto; margin-right: auto; }
 </style>
 """, unsafe_allow_html=True)
-
-# Background grid
+ 
+# ── BG GRID ──
 st.markdown('<div class="bg-grid"></div>', unsafe_allow_html=True)
-
+ 
 # ══════════════════════════════════════════════
-#  NAV BAR
+#  NAV — using st.button so NO new tabs ever
 # ══════════════════════════════════════════════
-p1 = "active" if PAGE == "home"     else ""
-p2 = "active" if PAGE == "projects" else ""
-p3 = "active" if PAGE == "about3"   else ""
-
 st.markdown(f"""
-<div class="nav">
+<div class="nav-bar">
   <span class="nav-logo">{NAME.lower().replace(' ','.')}</span>
-  <div class="nav-links">
-    <a href="?page=home"     class="{p1}">01 · About</a>
-    <a href="?page=projects" class="{p2}">02 · Projects</a>
-    <a href="?page=about3"   class="{p3}">03 · Experience</a>
-  </div>
 </div>
 """, unsafe_allow_html=True)
-
-
-def footer():
+ 
+# Nav buttons rendered in a tight row just below the logo bar
+nav_cols = st.columns([6, 1, 1, 1])
+with nav_cols[1]:
+    cls = "nav-active" if PAGE == "home" else ""
+    st.markdown(f'<div class="{cls}">', unsafe_allow_html=True)
+    if st.button("01 · About", key="nav_home"):
+        go("home")
+    st.markdown('</div>', unsafe_allow_html=True)
+ 
+with nav_cols[2]:
+    cls = "nav-active" if PAGE == "projects" else ""
+    st.markdown(f'<div class="{cls}">', unsafe_allow_html=True)
+    if st.button("02 · Projects", key="nav_proj"):
+        go("projects")
+    st.markdown('</div>', unsafe_allow_html=True)
+ 
+with nav_cols[3]:
+    cls = "nav-active" if PAGE == "about3" else ""
+    st.markdown(f'<div class="{cls}">', unsafe_allow_html=True)
+    if st.button("03 · Experience", key="nav_exp"):
+        go("about3")
+    st.markdown('</div>', unsafe_allow_html=True)
+ 
+ 
+# ── FOOTER HELPER ──
+def render_footer():
     rl = f'<a href="{RESUME_URL}" target="_blank" class="footer-link">📄 Resume</a>' if RESUME_URL else ''
     st.markdown(f"""
-    <div class="neon-divider"></div>
+    <div class="ndiv"></div>
     <div class="footer">
       <div class="footer-inner">
         <div>
           <div class="footer-logo">{NAME}</div>
-          <div class="footer-sub">Data Analyst · {EMAIL}</div>
+          <div class="footer-sub">Data Analyst &middot; {EMAIL}</div>
         </div>
         <div class="footer-links">
-          <a href="mailto:{EMAIL}" class="footer-link">✉ Email</a>
-          <a href="{LINKEDIN}" target="_blank" class="footer-link">🔗 LinkedIn</a>
-          <a href="{GITHUB}" target="_blank" class="footer-link">🐙 GitHub</a>
+          <a href="mailto:{EMAIL}" class="footer-link">&#9993; Email</a>
+          <a href="{LINKEDIN}" target="_blank" class="footer-link">&#128279; LinkedIn</a>
+          <a href="{GITHUB}" target="_blank" class="footer-link">&#128025; GitHub</a>
           {rl}
         </div>
       </div>
-      <div class="footer-copy">Built with Streamlit · {NAME} © 2025</div>
+      <div class="footer-copy">Built with Streamlit &middot; {NAME} &copy; 2025</div>
     </div>
     """, unsafe_allow_html=True)
-
-
+ 
+ 
 # ══════════════════════════════════════════════
 #  PAGE 1 — ABOUT + SKILLS
 # ══════════════════════════════════════════════
 if PAGE == "home":
     st.markdown('<div class="page">', unsafe_allow_html=True)
-
+ 
+    # Photo HTML
     photo_html = (
         f'<img src="{PHOTO_URL}" alt="{NAME}"/>'
-        if PHOTO_URL else
-        '<div class="photo-placeholder">🧑‍💻</div>'
+        if PHOTO_URL
+        else '<div class="photo-placeholder">&#129489;&#8205;&#128187;</div>'
     )
-
-    stats_html = ""
+ 
+    # Build stats HTML safely
+    stats_parts = []
     for i, s in enumerate(STATS):
-        stats_html += f'<div class="stat-item"><div class="stat-num">{s["num"]}</div><div class="stat-label">{s["label"]}</div></div>'
+        stats_parts.append(
+            f'<div class="stat-item">'
+            f'<div class="stat-num">{s["num"]}</div>'
+            f'<div class="stat-label">{s["label"]}</div>'
+            f'</div>'
+        )
         if i < len(STATS) - 1:
-            stats_html += '<div class="stat-div"></div>'
-
-    rl = f'<a href="{RESUME_URL}" target="_blank" class="btn-neon btn-neon-o">📄 Resume</a>' if RESUME_URL else ''
-
+            stats_parts.append('<div class="stat-div"></div>')
+    stats_html = "".join(stats_parts)
+ 
+    rl = (f'<a href="{RESUME_URL}" target="_blank" class="btn-o">&#128196; Resume</a>'
+          if RESUME_URL else "")
+ 
     st.markdown(f"""
-    <div class="hero">
-      <div style="position:relative;z-index:1">
+    <div class="hero-wrap">
+      <div>
         <div class="hero-eyebrow">Available for opportunities</div>
         <div class="hero-name">Hi, I'm<br><span class="neon-g">{NAME}</span></div>
         <div class="hero-role">{ROLE}</div>
         <div class="hero-tagline">"{TAGLINE}"</div>
         <div class="hero-btns">
-          <a href="?page=projects" class="btn-neon btn-neon-g">🚀 View Projects</a>
-          <a href="{LINKEDIN}" target="_blank" class="btn-neon btn-neon-o">🔗 LinkedIn</a>
+          <a href="#projects" class="btn-g">&#128640; View Projects</a>
+          <a href="{LINKEDIN}" target="_blank" class="btn-o">&#128279; LinkedIn</a>
           {rl}
         </div>
         <div class="stat-row">{stats_html}</div>
       </div>
-      <div class="hero-right">
-        <div style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(61,220,151,.1),transparent 70%);pointer-events:none"></div>
-        <div style="position:absolute;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,255,.06),transparent 70%);pointer-events:none"></div>
+      <div class="photo-wrap">
+        <div class="photo-glow"></div>
+        <div class="photo-glow2"></div>
         <div class="photo-container">
-          <div class="photo-ring photo-ring-3"></div>
-          <div class="photo-ring photo-ring-1"></div>
-          <div class="photo-ring photo-ring-2"></div>
+          <div class="ring r3"></div>
+          <div class="ring r1"></div>
+          <div class="ring r2"></div>
           <div class="photo-inner">{photo_html}</div>
         </div>
       </div>
     </div>
     """, unsafe_allow_html=True)
-
-    st.markdown('<div class="neon-divider"></div>', unsafe_allow_html=True)
-
+ 
+    st.markdown('<div class="ndiv"></div>', unsafe_allow_html=True)
+ 
     # ABOUT
     st.markdown("""
     <div class="section">
@@ -594,80 +641,80 @@ if PAGE == "home":
     """, unsafe_allow_html=True)
     st.markdown(f'<div class="about-text">{ABOUT_TEXT}</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown('<div class="neon-divider"></div>', unsafe_allow_html=True)
-
+ 
+    st.markdown('<div class="ndiv"></div>', unsafe_allow_html=True)
+ 
     # SKILLS
     st.markdown("""
     <div class="section">
       <div class="sec-eyebrow">// what i use</div>
-      <div class="sec-title">Skills & <span>Tools</span></div>
-      <div class="sec-sub">Hover any badge to see it glow ✨</div>
+      <div class="sec-title">Skills &amp; <span>Tools</span></div>
+      <div class="sec-sub">Hover any badge to see it glow &#10024;</div>
       <div class="skills-grid">
     """, unsafe_allow_html=True)
-
+ 
     for sk in SKILLS:
-        st.markdown(f"""
-        <div class="skill-badge" style="--sc:{sk['color']}">
-          <span class="skill-icon">{sk['icon']}</span>
-          <div class="skill-name">{sk['name']}</div>
-          <div class="skill-bar-track">
-            <div class="skill-bar-fill" style="width:{sk['level']}%"></div>
-          </div>
-          <div class="skill-pct">{sk['level']}%</div>
-        </div>
-        """, unsafe_allow_html=True)
-
+        st.markdown(
+            f'<div class="skill-badge" style="--sc:{sk["color"]}">'
+            f'<span class="skill-icon">{sk["icon"]}</span>'
+            f'<div class="skill-name">{sk["name"]}</div>'
+            f'<div class="skill-track"><div class="skill-fill" style="width:{sk["level"]}%"></div></div>'
+            f'<div class="skill-pct">{sk["level"]}%</div>'
+            f'</div>',
+            unsafe_allow_html=True
+        )
+ 
     st.markdown('</div></div>', unsafe_allow_html=True)
-    footer()
+    render_footer()
     st.markdown('</div>', unsafe_allow_html=True)
-
-
+ 
+ 
 # ══════════════════════════════════════════════
 #  PAGE 2 — PROJECTS
 # ══════════════════════════════════════════════
 elif PAGE == "projects":
     st.markdown('<div class="page">', unsafe_allow_html=True)
-
+ 
     st.markdown("""
     <div class="section">
       <div class="sec-eyebrow">// what i've built</div>
       <div class="sec-title">My <span>Projects</span></div>
-      <div class="sec-sub">Hover any card for the full neon glow 🔥</div>
+      <div class="sec-sub">Hover any card for the full neon glow &#128293;</div>
       <div class="proj-grid">
     """, unsafe_allow_html=True)
-
+ 
     for proj in PROJECTS:
         tags_html = "".join(f'<span class="ptag">{t}</span>' for t in proj["tech"])
         link_html = (
-            f'<div class="proj-link"><a href="{proj["link"]}" target="_blank">→ View on GitHub</a></div>'
+            f'<div class="proj-link"><a href="{proj["link"]}" target="_blank">&#8594; View on GitHub</a></div>'
             if proj.get("link") else ""
         )
-        st.markdown(f"""
-        <div class="proj-card" style="--pc:{proj['color']}">
-          <div class="proj-topbar"></div>
-          <div class="proj-header">
-            <span class="proj-emoji">{proj['emoji']}</span>
-            <span class="proj-impact">{proj['impact']}</span>
-          </div>
-          <div class="proj-title">{proj['title']}</div>
-          <div class="proj-desc">{proj['desc']}</div>
-          <div class="proj-tags">{tags_html}</div>
-          {link_html}
-        </div>
-        """, unsafe_allow_html=True)
-
+        st.markdown(
+            f'<div class="proj-card" style="--pc:{proj["color"]}">'
+            f'<div class="proj-topbar"></div>'
+            f'<div class="proj-header">'
+            f'<span class="proj-emoji">{proj["emoji"]}</span>'
+            f'<span class="proj-impact">{proj["impact"]}</span>'
+            f'</div>'
+            f'<div class="proj-title">{proj["title"]}</div>'
+            f'<div class="proj-desc">{proj["desc"]}</div>'
+            f'<div class="proj-tags">{tags_html}</div>'
+            f'{link_html}'
+            f'</div>',
+            unsafe_allow_html=True
+        )
+ 
     st.markdown('</div></div>', unsafe_allow_html=True)
-    footer()
+    render_footer()
     st.markdown('</div>', unsafe_allow_html=True)
-
-
+ 
+ 
 # ══════════════════════════════════════════════
 #  PAGE 3 — EXPERIENCE + CERTS + GITHUB + RESUME
 # ══════════════════════════════════════════════
 elif PAGE == "about3":
     st.markdown('<div class="page">', unsafe_allow_html=True)
-
+ 
     # EXPERIENCE
     st.markdown("""
     <div class="section">
@@ -676,43 +723,45 @@ elif PAGE == "about3":
       <div class="sec-sub">My professional journey so far</div>
       <div class="timeline">
     """, unsafe_allow_html=True)
-
+ 
     for exp in EXPERIENCE:
         pts = "".join(f"<li>{p}</li>" for p in exp["points"])
-        st.markdown(f"""
-        <div class="tl-item" style="--tc:{exp['color']}">
-          <div class="tl-dot"></div>
-          <div class="tl-period">{exp['period']}</div>
-          <div class="tl-role">{exp['role']}</div>
-          <div class="tl-company">{exp['company']}</div>
-          <ul class="tl-points">{pts}</ul>
-        </div>
-        """, unsafe_allow_html=True)
-
+        st.markdown(
+            f'<div class="tl-item" style="--tc:{exp["color"]}">'
+            f'<div class="tl-dot"></div>'
+            f'<div class="tl-period">{exp["period"]}</div>'
+            f'<div class="tl-role">{exp["role"]}</div>'
+            f'<div class="tl-company">{exp["company"]}</div>'
+            f'<ul class="tl-points">{pts}</ul>'
+            f'</div>',
+            unsafe_allow_html=True
+        )
+ 
     st.markdown('</div></div>', unsafe_allow_html=True)
-    st.markdown('<div class="neon-divider"></div>', unsafe_allow_html=True)
-
+    st.markdown('<div class="ndiv"></div>', unsafe_allow_html=True)
+ 
     # CERTS
     st.markdown("""
     <div class="section">
       <div class="sec-eyebrow">// what i've earned</div>
-      <div class="sec-title"><span>Certifications</span> & Achievements</div>
+      <div class="sec-title"><span>Certifications</span> &amp; Achievements</div>
       <div class="sec-sub">Official credentials and completed courses</div>
       <div class="certs-grid">
     """, unsafe_allow_html=True)
-
+ 
     for cert in CERTS:
-        st.markdown(f"""
-        <div class="cert-card" style="--cc:{cert['color']}">
-          <div class="cert-name">{cert['name']}</div>
-          <div class="cert-issuer">{cert['issuer']}</div>
-          <div class="cert-year">{cert['year']}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
+        st.markdown(
+            f'<div class="cert-card" style="--cc:{cert["color"]}">'
+            f'<div class="cert-name">{cert["name"]}</div>'
+            f'<div class="cert-issuer">{cert["issuer"]}</div>'
+            f'<div class="cert-year">{cert["year"]}</div>'
+            f'</div>',
+            unsafe_allow_html=True
+        )
+ 
     st.markdown('</div></div>', unsafe_allow_html=True)
-    st.markdown('<div class="neon-divider"></div>', unsafe_allow_html=True)
-
+    st.markdown('<div class="ndiv"></div>', unsafe_allow_html=True)
+ 
     # GITHUB STATS
     st.markdown(f"""
     <div class="section">
@@ -720,42 +769,42 @@ elif PAGE == "about3":
       <div class="sec-title">GitHub <span>Activity</span></div>
       <div class="sec-sub">Open source contributions and stats</div>
       <div class="gh-grid">
-        <div class="gh-stat"><div class="gh-stat-num">{GH_STATS['repos']}</div><div class="gh-stat-label">Repositories</div></div>
-        <div class="gh-stat"><div class="gh-stat-num">{GH_STATS['stars']}</div><div class="gh-stat-label">Stars Earned</div></div>
-        <div class="gh-stat"><div class="gh-stat-num">{GH_STATS['commits']}</div><div class="gh-stat-label">Total Commits</div></div>
-        <div class="gh-stat"><div class="gh-stat-num">{GH_STATS['streak']}</div><div class="gh-stat-label">Longest Streak</div></div>
+        <div class="gh-stat"><div class="gh-num">{GH_STATS['repos']}</div><div class="gh-label">Repositories</div></div>
+        <div class="gh-stat"><div class="gh-num">{GH_STATS['stars']}</div><div class="gh-label">Stars Earned</div></div>
+        <div class="gh-stat"><div class="gh-num">{GH_STATS['commits']}</div><div class="gh-label">Total Commits</div></div>
+        <div class="gh-stat"><div class="gh-num">{GH_STATS['streak']}</div><div class="gh-label">Longest Streak</div></div>
       </div>
-      <div style="margin-top:1.5rem;text-align:center">
-        <a href="https://github.com/{GITHUB_USERNAME}" target="_blank" class="btn-neon btn-neon-o" style="display:inline-flex">🐙 Visit GitHub Profile</a>
+      <div style="margin-top:1.4rem;text-align:center">
+        <a href="https://github.com/{GITHUB_USERNAME}" target="_blank" class="btn-o" style="display:inline-flex">&#128025; Visit GitHub Profile</a>
       </div>
     </div>
     """, unsafe_allow_html=True)
-
-    st.markdown('<div class="neon-divider"></div>', unsafe_allow_html=True)
-
+ 
+    st.markdown('<div class="ndiv"></div>', unsafe_allow_html=True)
+ 
     # RESUME
     st.markdown("""
     <div class="section">
       <div class="sec-eyebrow">// download</div>
       <div class="sec-title">My <span>Resume</span></div>
     """, unsafe_allow_html=True)
-
+ 
     if RESUME_URL:
         st.markdown(f"""
         <div class="resume-box">
-          <div class="resume-icon">📄</div>
+          <div class="resume-icon">&#128196;</div>
           <p>My full resume with detailed work history, education, skills and achievements.</p>
-          <a href="{RESUME_URL}" target="_blank" class="btn-neon btn-neon-g">⬇ Download Resume PDF</a>
+          <a href="{RESUME_URL}" target="_blank" class="btn-g">&#11015; Download Resume PDF</a>
         </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown("""
         <div class="resume-box">
-          <div class="resume-icon">📄</div>
-          <p>Resume coming soon!<br>Set the <code>RESUME_URL</code> variable at the top of <code>port.py</code> to add your CV link.</p>
+          <div class="resume-icon">&#128196;</div>
+          <p>Resume coming soon!<br>Set the <code>RESUME_URL</code> at the top of <code>port.py</code> to add your CV link.</p>
         </div>
         """, unsafe_allow_html=True)
-
+ 
     st.markdown('</div>', unsafe_allow_html=True)
-    footer()
+    render_footer()
     st.markdown('</div>', unsafe_allow_html=True)
