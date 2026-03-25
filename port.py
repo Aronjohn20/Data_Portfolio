@@ -17,7 +17,7 @@ EMAIL       = "aronjohn12112004@gmail.com"
 LINKEDIN    = "www.linkedin.com/in/aron-john27"
 GITHUB      = "https://github.com/Aronjohn20/Aronjohn20"
 RESUME_URL  = "https://drive.google.com/drive/folders/15_RRig9nWpqGERHO2WGEbcDbIGdb0tQZ?usp=drive_link"           # ← paste Google Drive / Dropbox PDF link
-PHOTO_URL   = "https://github.com/Aronjohn20/Data_Portfolio/blob/main/pic.jpeg"           # ← paste a direct image URL or leave empty
+PHOTO_URL = "https://raw.githubusercontent.com/Aronjohn20/Data_Portfolio/main/pic.jpeg"       # ← paste a direct image URL or leave empty
 
 ABOUT_TEXT = """
 Hi! I'm Aron — a aspiring data analyst obsessed with finding the story and solutions inside messy datasets.
