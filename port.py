@@ -136,14 +136,14 @@ CERTS = [
     {"name": "SQL - Hackerrank",  "issuer": "Hackerrank",             "year": "2025", "color": "#FF4DFF" }
 ]
 
-# # ✏️ GitHub stats (update manually)
-# GITHUB_USERNAME = "alexmercer"
-# GH_STATS = {
-#     "repos":   42,
-#     "stars":   180,
-#     "commits": "1.2k",
-#     "streak":  "47 days",
-# }
+# ✏️ GitHub stats (update manually)
+GITHUB_USERNAME = "Aronjohn20"
+GH_STATS = {
+    "repos":   14,
+    "stars":   0,
+    "commits": "110",
+    "streak":  "3",
+}
 
 # ══════════════════════════════════════════════════════════
 #  PAGE STATE — using session_state (no URL, no new tabs!)
