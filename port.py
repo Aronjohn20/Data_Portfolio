@@ -14,7 +14,7 @@ NAME        = "Aron Varghese John"
 ROLE        = "Data Analyst"
 TAGLINE     = "I turn raw chaos into clean insight."
 EMAIL       = "aronjohn12112004@gmail.com"
-LINKEDIN    = "www.linkedin.com/in/aron-john27"
+LINKEDIN    = "https://www.linkedin.com/in/aron-john27"
 GITHUB      = "https://github.com/Aronjohn20/Aronjohn20"
 RESUME_URL  = "https://drive.google.com/drive/folders/15_RRig9nWpqGERHO2WGEbcDbIGdb0tQZ?usp=drive_link"           # ← paste Google Drive / Dropbox PDF link
 PHOTO_URL = "https://raw.githubusercontent.com/Aronjohn20/Data_Portfolio/main/pic.jpeg"       # ← paste a direct image URL or leave empty
@@ -612,7 +612,7 @@ if PAGE == "home":
       </div>
     </div>
     """, unsafe_allow_html=True)
- 
+    st.markdown('<div id="projects"></div>', unsafe_allow_html=True)
     st.markdown('<div class="ndiv"></div>', unsafe_allow_html=True)
  
     # ABOUT
