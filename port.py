@@ -16,8 +16,8 @@ TAGLINE     = "I turn raw chaos into clean insight."
 EMAIL       = "aronjohn12112004@gmail.com"
 LINKEDIN    = "https://www.linkedin.com/in/aron-john27"
 GITHUB      = "https://github.com/Aronjohn20/Aronjohn20"
-RESUME_URL  = "https://drive.google.com/drive/folders/15_RRig9nWpqGERHO2WGEbcDbIGdb0tQZ?usp=drive_link"           # ← paste Google Drive / Dropbox PDF link
-PHOTO_URL = "https://raw.githubusercontent.com/Aronjohn20/Data_Portfolio/main/pic.jpeg"       # ← paste a direct image URL or leave empty
+RESUME_URL  = "https://drive.google.com/drive/folders/15_RRig9nWpqGERHO2WGEbcDbIGdb0tQZ?usp=drive_link"           
+PHOTO_URL = "https://raw.githubusercontent.com/Aronjohn20/Data_Portfolio/main/pic.jpeg"       
 
 ABOUT_TEXT = """
 Hi! I'm Aron — a aspiring data analyst obsessed with finding the story and solutions inside messy datasets.
