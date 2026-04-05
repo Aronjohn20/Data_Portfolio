@@ -85,7 +85,6 @@ PROJECTS = [
     },
 ]
 
-# ✏️ Work experience
 EXPERIENCE = [
     # {
     #     "role":    "Senior Data Analyst",
