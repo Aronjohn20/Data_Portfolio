@@ -7,9 +7,9 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ══════════════════════════════════════════════
+# ═════════════════════════════════════════════
 #  ✏️  EDIT YOUR INFO HERE — NEVER TOUCH BELOW
-# ══════════════════════════════════════════════
+# ═════════════════════════════════════════════
 NAME        = "Aron Varghese John"
 ROLE        = "Data Analyst"
 TAGLINE     = "I turn raw chaos into clean insight."
