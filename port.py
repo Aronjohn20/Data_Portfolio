@@ -81,7 +81,7 @@ PROJECTS = [
     "tech":   ["SQL", "Power BI", "DAX"],
     "desc":   "Analyzed state-wise COVID data by transforming cumulative values into daily metrics and building dashboards to study trends, peaks, and recovery/death rate behavior over time.",
     "impact": "Pattern-based Insights",
-    "link":   "https://github.com/Aronjohn20/Health-Analysis"
+    "link":   "https://github.com/Aronjohn20/Health_Analysis"
 }
 ]
 
