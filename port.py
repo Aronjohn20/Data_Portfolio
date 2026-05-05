@@ -74,15 +74,15 @@ PROJECTS = [
         "impact": "100k+ Records",
         "link":   "https://github.com/Aronjohn20/Stride_Analysis",
     },
-    {
-        "title":  "Flipkart Sales Data Analysis",
-        "emoji":  "📦",
-        "color":  "#BD00FF",
-        "tech":   ["MySQL", "Power BI"],
-        "desc":   "Explored 5,000 sales records using SQL queries and built Power BI dashboards to analyze product performance, category trends, and customer purchasing behavior.",
-        "impact": "SQL + BI Insights",
-        "link":   "https://github.com/Aronjohn20/Data-Analysis",
-    },
+  {
+    "title":  "COVID-19 State-wise Pattern Analysis",
+    "emoji":  "📊",
+    "color":  "#00A8E8",
+    "tech":   ["SQL", "Power BI", "DAX"],
+    "desc":   "Analyzed state-wise COVID data by transforming cumulative values into daily metrics and building dashboards to study trends, peaks, and recovery/death rate behavior over time.",
+    "impact": "Pattern-based Insights",
+    "link":   "https://github.com/Aronjohn20/Health-Analysis"
+}
 ]
 
 EXPERIENCE = [
